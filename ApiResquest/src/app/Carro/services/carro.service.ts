@@ -11,9 +11,12 @@ import { ICarro } from '../ICarro';
 export class CarroService {
   constructor(private httpClient: HttpClient) {}
 
-  // Get All
+  // Get All / Select All
   async obterTodos() {
     // Get retorna um array com todos os itens do model, por isso o "[]" junto com Carro
+    /*Quando passa um <> nos métodos http é para caso vc queira retornar o dado que sofreu alguma ação.
+    No caso então esse é basicamente o tipo de retorno do valor da variável*/
+
     const data$ = this.httpClient.get<ICarro[]>(`${API_PATH}Carros`);
 
     /*
@@ -33,10 +36,35 @@ export class CarroService {
     return get;
   }
 
-  // Get By Id
+
+  // Get By Id / Select by Id
   async obterUm(id: number) {
     const data$ = this.httpClient.get<ICarro>(`${API_PATH}Carros/${id}`);
     const get = await firstValueFrom(data$);
     return get;
+  }
+
+
+  // Post / Insert
+  async adicionar(carro: ICarro) {
+    const data$ = this.httpClient.post(`${API_PATH}Carros`, carro);
+    const post = await firstValueFrom(data$);
+    return post;
+  }
+
+
+  // Put / Update
+  async atualizar(carro: ICarro) {
+    const data$ = this.httpClient.put<ICarro>(`${API_PATH}Carros/${carro.id}`, carro);
+    const put = await firstValueFrom(data$);
+    return put;
+  }
+
+
+  // Delete / Delete
+  async deletar(id: number) {
+    const data$ = this.httpClient.delete<void>(`${API_PATH}Carros/${id}`);
+    const remove = await firstValueFrom(data$);
+    return remove;
   }
 }
